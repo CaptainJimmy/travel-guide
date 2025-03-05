@@ -1,6 +1,6 @@
-import { IsNumber, Matches, Max, Min } from 'class-validator';
+import { IsNumber, Max, Min, Matches } from 'class-validator';
 
-export class CreateWebhookDto {
+export class GetLandmarksDto {
   @IsNumber()
   @Min(-90, { message: 'Latitude must be between -90 and 90' })
   @Max(90, { message: 'Latitude must be between -90 and 90' })

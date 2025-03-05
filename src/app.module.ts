@@ -9,8 +9,8 @@ import { WebhookModule } from './webhook/webhook.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'database.sqlite', // SQLite database file
-      entities: [__dirname + '/**/*.entity{.ts,.js}'], // Load all entities
+      database: 'landmarks.db', // SQLite database file
+      entities: [Landmark],
       synchronize: true, // Auto-create tables (disable in production)
     }),
     LandmarksModule,

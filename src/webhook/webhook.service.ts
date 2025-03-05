@@ -4,23 +4,31 @@ import { UpdateWebhookDto } from './dto/update-webhook.dto';
 
 @Injectable()
 export class WebhookService {
-  create(createWebhookDto: CreateWebhookDto) {
-    return 'This action adds a new webhook';
-  }
+  fetchAndCreateLandmarks(params: CreateWebhookDto) {
+    try {
+      const query = `
+        [out:json];
+        (
+          node(around:1000, ${params.lat}, ${params.long})["tourism"];
+          way(around:1000, ${params.lat}, ${params.long})["highway"];
+        );
+        out body;
+      `;
 
-  findAll() {
-    return `This action returns all webhook`;
-  }
+      const response = await axios.get('https://overpass-api.de/api/interpreter', {
+        params: { data: query },
+      });
 
-  findOne(id: number) {
-    return `This action returns a #${id} webhook`;
-  }
+      const elements = response.data.elements;
 
-  update(id: number, updateWebhookDto: UpdateWebhookDto) {
-    return `This action updates a #${id} webhook`;
-  }
+      const landmarks = elements.map((el) => ({
+        osmId: el.id.toString(),
+        type: el.type,
+        latitude: el.lat ?? null,
+        longitude: el.lon ?? null,
+        name: el.tags?.name ?? null,
+        tags: el.tags ?? {},
+      }));
 
-  remove(id: number) {
-    return `This action removes a #${id} webhook`;
   }
 }

@@ -9,7 +9,7 @@ export class WebhookController {
   constructor(private readonly webhookService: WebhookService) {}
 
   @Post()
-  create(@Body() createWebhookDto: CreateWebhookDto) {
-    return this.webhookService.create(createWebhookDto);
+  fetchAndCreateLandmarks(@Body() createWebhookDto: CreateWebhookDto) {
+    return this.webhookService.fetchAndCreateLandmarks(createWebhookDto);
   }
 }
