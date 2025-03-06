@@ -8,22 +8,13 @@ import { Landmark } from '../landmarks/entities/landmark.entity';
 export interface OverpassElement {
   id: number;
   type: 'node' | 'way' | 'relation';
-  lat?: number;
-  lon?: number;
+  lat: number;
+  lon: number;
   tags?: Record<string, string>;
 }
 
 export interface OverpassResponse {
   elements: OverpassElement[];
-}
-
-export interface LandmarkData {
-  osmId: string;
-  type: 'node' | 'way' | 'relation';
-  lat: number | null;
-  long: number | null;
-  name: string | null;
-  tags: Record<string, string>;
 }
 
 @Injectable()
@@ -38,8 +29,8 @@ export class WebhookService {
       const query = `
         [out:json];
         (
-          node(around:1000, ${params.lat}, ${params.long})["tourism"];
-          way(around:1000, ${params.lat}, ${params.long})["highway"];
+          node(around:1000, ${params.lat}, ${params.lon})["tourism"];
+          way(around:1000, ${params.lat}, ${params.lon})["highway"];
         );
         out body;
       `;
@@ -52,13 +43,17 @@ export class WebhookService {
       );
 
       const elements: OverpassElement[] = response.data.elements;
+      // Filter: saving only 'node' type & ensure lat/lon exist
+      const validElements = elements.filter(
+        (el) =>
+          el.type === 'node' && el.lat !== undefined && el.lon !== undefined,
+      );
 
-      const landmarks: LandmarkData[] = elements.map((el) => ({
+      const landmarks = validElements.map((el) => ({
         osmId: el.id.toString(),
-        type: el.type,
-        lat: el.lat ? parseFloat(el.lat.toFixed(3)) : null,
-        long: el.lon ? parseFloat(el.lon.toFixed(3)) : null,
-        name: el.tags?.name ?? null,
+        lat: el.lat ? parseFloat(el.lat.toFixed(3)) : 0.0,
+        lon: el.lon ? parseFloat(el.lon.toFixed(3)) : 0.0,
+        name: el.tags?.name ?? undefined,
         tags: el.tags ?? {},
       }));
 
@@ -66,7 +61,9 @@ export class WebhookService {
 
       return `Stored ${landmarks.length} landmarks successfully!`;
     } catch (error) {
-      throw new Error(`Failed to fetch or store landmarks`);
+      throw new Error(
+        `Failed to fetch or store landmarks: ${error?.message ?? 'Unknown error'}`,
+      );
     }
   }
 }

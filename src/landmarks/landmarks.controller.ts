@@ -15,7 +15,10 @@ export class LandmarksController {
   @Get()
   @UsePipes(new ValidationPipe({ transform: true }))
   getLandmarks(@Query() query: GetLandmarksDto) {
-    const { lat, long } = query;
-    return this.landmarksService.findAll(lat, long);
+    const { lat, lon } = query;
+    return this.landmarksService.getLandmarks(
+      parseFloat(lat.toFixed(3)),
+      parseFloat(lon.toFixed(3)),
+    );
   }
 }

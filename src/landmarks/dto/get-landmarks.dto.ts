@@ -15,5 +15,5 @@ export class GetLandmarksDto {
   @Matches(/^(-?\d{1,3}\.\d{5})$/, {
     message: 'Longitude must have exactly 5 decimal places',
   })
-  long: number;
+  lon: number;
 }
