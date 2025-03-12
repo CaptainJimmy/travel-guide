@@ -17,6 +17,6 @@ export class LandmarkEntity {
   @Column({ type: 'json', nullable: true })
   tags: object | null;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 }

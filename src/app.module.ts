@@ -13,7 +13,6 @@ import { Landmark } from './landmarks/entities/landmark.entity';
       entities: [Landmark],
       synchronize: true, // Auto-create tables (disable in production)
     }),
-    TypeOrmModule.forFeature([Landmark]),
     LandmarksModule,
     WebhookModule,
   ],

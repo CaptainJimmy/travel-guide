@@ -3,7 +3,7 @@ import { CreateWebhookDto } from './dto/create-webhook.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import axios from 'axios';
-import { Landmark } from '../landmarks/entities/landmark.entity';
+import { LandmarkEntity } from './entities/landmark.entity';
 
 export interface OverpassElement {
   id: number;
@@ -20,8 +20,8 @@ export interface OverpassResponse {
 @Injectable()
 export class WebhookService {
   constructor(
-    @InjectRepository(Landmark)
-    private readonly landmarkRepository: Repository<Landmark>,
+    @InjectRepository(LandmarkEntity)
+    private readonly landmarkRepository: Repository<LandmarkEntity>,
   ) {}
 
   async fetchAndCreateLandmarks(params: CreateWebhookDto) {

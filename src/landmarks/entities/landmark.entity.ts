@@ -23,6 +23,6 @@ export class Landmark {
   @Column({ type: 'json', nullable: true })
   tags: object;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 }
